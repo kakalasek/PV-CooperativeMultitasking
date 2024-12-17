@@ -1,21 +1,21 @@
-import asyncio
-import time
-import sys
+from coop_mult_example.eventloop import EventLoop
 
-async def print_time():
-    while True:
-        print(time.ctime())
-        await asyncio.sleep(5)
+def test_func():
+    print("uno")
+    yield
+    print("dos")
+    yield
+    print("tres")
 
-def echo_input():
-    print(input().upper())
 
-async def main():
-    asyncio.get_event_loop().add_reader(
-        sys.stdin,
-        echo_input
-    )
-    await print_time()
+if __name__ == '__main__':
+    task1 = test_func
+    task2 = test_func
+    task3 = test_func
 
-if __name__ == "__main__":
-    asyncio.run(main())
+    loop = EventLoop()
+    loop.registerTask(task1)
+    loop.registerTask(task2)
+    loop.registerTask(task3)
+
+    loop.startLoop()
